@@ -4,6 +4,7 @@ import fs from "fs";
 async function uploadVideo(accessToken) {
   const youtube = google.youtube({
     version: "v3",
+    auth: "AIzaSyCS0V5ed0zPD5Fj4Nv1PqPvaOQRrDJpuKg",
   });
 
   // Prepare the video resource
@@ -26,8 +27,10 @@ async function uploadVideo(accessToken) {
       auth: `Bearer ${accessToken}`,
       access_token: accessToken,
     });
+    return response;
   } catch (err) {
-    console.log("err", err);
+    console.error("err", err);
+    return err;
   }
 }
 

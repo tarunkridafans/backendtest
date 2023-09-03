@@ -18,8 +18,11 @@ app.post("/", async (req, res) => {
     let response = await uploadVideo(accessToken);
 
     if (response?.data) {
-      console.log("Video uploaded:", response.data);
-      res.status(200).json({ message: "Video uploaded successfully" });
+      res
+        .status(200)
+        .json({ message: "Video uploaded successfully", data: response.data });
+    } else {
+      res.status(500).json({ message: "Video error", data: response });
     }
   } catch (err) {
     console.error(err);
