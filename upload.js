@@ -1,10 +1,13 @@
 import { google } from "googleapis";
+import { Readable } from "stream";
 import fs from "fs";
 
-async function uploadVideo(accessToken) {
+const apiKey = process.env.API_KEY;
+
+async function uploadVideo(accessToken, videoBuffer) {
   const youtube = google.youtube({
     version: "v3",
-    auth: "AIzaSyCS0V5ed0zPD5Fj4Nv1PqPvaOQRrDJpuKg",
+    auth: apiKey,
   });
 
   // Prepare the video resource
@@ -18,11 +21,12 @@ async function uploadVideo(accessToken) {
     },
   };
   try {
+    const videoStream = Readable.from(videoBuffer);
     const response = await youtube.videos.insert({
       part: "snippet,status",
       resource: videoResource,
       media: {
-        body: fs.createReadStream("./p.mp4"),
+        body: videoStream,
       },
       auth: `Bearer ${accessToken}`,
       access_token: accessToken,
